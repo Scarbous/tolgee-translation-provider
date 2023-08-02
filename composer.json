@@ -1,0 +1,36 @@
+{
+    "name": "scarbous/tolgee-translation-provider",
+    "description": "Symfony Tolgee Translation Provider Bridge",
+    "type": "symfony-bridge",
+    "keywords": [
+        "tolgee",
+        "translation",
+        "provider"
+    ],
+    "authors": [
+        {
+            "name": "Sascha Heilmeier"
+        }
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Scarbous\\TolgeeTranslationProvider\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scarbous\\TolgeeTranslationProvider\\Test\\": "test/"
+        }
+    },
+    "require": {
+        "php": ">=7.2.5",
+        "symfony/config": "5.3.*",
+        "symfony/http-client": "5.3.*",
+        "symfony/translation": "5.3.*"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "*"
+    },
+    "minimum-stability": "dev"
+}
