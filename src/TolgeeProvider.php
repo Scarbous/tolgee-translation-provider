@@ -12,14 +12,15 @@
 namespace Scarbous\TolgeeTranslationProvider;
 
 use Psr\Log\LoggerInterface;
+use Scarbous\TolgeeTranslationProvider\Http\TolgeeClientInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\Exception\ProviderException;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
-use Symfony\Component\Translation\Loader\LoaderInterface;
 use Symfony\Component\Translation\Provider\ProviderInterface;
 use Symfony\Component\Translation\TranslatorBag;
 use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class TolgeeProvider implements ProviderInterface
 {
@@ -38,7 +39,7 @@ class TolgeeProvider implements ProviderInterface
     private $filterState;
 
     public function __construct(
-        HttpClientInterface $client,
+        TolgeeClientInterface $client,
         JsonFileLoader      $loader,
         LoggerInterface     $logger,
         string              $defaultLocale,
@@ -60,8 +61,10 @@ class TolgeeProvider implements ProviderInterface
 
     public function read(array $domains, array $locales): TranslatorBag
     {
-        $domains = $domains ?: $this->getAllNamespaces();
+        $locales = $locales ?: $this->client->getAllLanguages();
+        $domains = $domains ?: $this->client->getAllNamespaces();
         $translatorBag = new TranslatorBag();
+
 
         $query = [
             'format' => 'JSON',
@@ -74,34 +77,27 @@ class TolgeeProvider implements ProviderInterface
 
         foreach ($locales as $locale) {
             foreach ($domains as $domain) {
-
-                $response = $this->client->request('GET', 'export', [
-                    'buffer' => false,
-                    'query' => array_merge([
-                        'filterNamespace' => $domain,
-                        'languages' => $locale
-                    ], $query)
-                ]);
-
-                if (200 !== $response->getStatusCode()) {
-                    $this->logger->warning(sprintf('Locale "%s" for domain "%s" does not exist in Loco.', $locale, $domain));
+                if ($domain === null) {
+                    $this->logger->warning(sprintf(
+                        'Unnamed domains are not allowed',
+                        $locale
+                    ));
                     continue;
                 }
-
-                $jsonFile = tempnam(sys_get_temp_dir(), "tolgee.$domain.$locale.json");
-                $jsonFileHandler = fopen($jsonFile, 'w');
-
-                foreach ($this->client->stream($response) as $chunk) {
-                    fwrite($jsonFileHandler, $chunk->getContent());
-                }
-                fclose($jsonFileHandler);
-                $tolgeeCatalogue = $this->loader->load($jsonFile, $locale, $domain);
-                
-                unlink($jsonFile);
-
-                $translatorBag->addCatalogue($tolgeeCatalogue);
+                $this->client->exportFileCallback(
+                    function (?string $jsonFile) use ($translatorBag, $locale, $domain) {
+                        if ($jsonFile) {
+                            $tolgeeCatalogue = $this->loader->load($jsonFile, $locale, $domain);
+                            $translatorBag->addCatalogue($tolgeeCatalogue);
+                        }
+                    },
+                    $domain,
+                    $locale,
+                    $this->filterState
+                );
             }
         }
+
         return $translatorBag;
     }
 
@@ -110,34 +106,55 @@ class TolgeeProvider implements ProviderInterface
         throw new \LogicException('Deleting translations is not supported by the Tolgee provider.');
     }
 
+    private function createDataPartFile($name, $content): DataPart
+    {
+
+        return new DataPart(
+            body: $content,
+            filename: sprintf('%s.json', $name),
+            contentType: 'application/json',
+        );
+    }
+
     public function write(TranslatorBagInterface $translatorBag): void
     {
-        throw new \LogicException('Write translations is not supported by the Tolgee provider.');
-    }
+        $files = [];
 
-    private function getAllNamespaces(): array
-    {
-        $response = $this->client->request('GET', 'used-namespaces');
-        if (200 !== $response->getStatusCode()) {
-            throw new ProviderException(sprintf('Unable to fetch namespaces from tolgee: "%s".', $response->getContent(false)), $response);
-        }
-        $data = $response->getContent(false);
-        $data = json_decode($data, true);
-        return array_map(function ($n) {
-            return $n['name'];
-        }, $data['_embedded']['namespaces']);
-    }
+        $languages = iterator_to_array($this->client->getLanguages());
 
-    private function getAllLanguages(): array
-    {
-        $response = $this->client->request('GET', 'languages');
-        if (200 !== $response->getStatusCode()) {
-            throw new ProviderException(sprintf('Unable to fetch languages from tolgee: "%s".', $response->getContent(false)), $response);
+        # remove files from import
+        $this->client->importDelete();
+
+        $importMap = [];
+
+        foreach ($translatorBag->getCatalogues() as $cataloge) {
+            $locale = $cataloge->getLocale();
+            if (!in_array($locale, $languages)) {
+                $this->client->addLanguage($locale);
+            }
+            foreach ($cataloge->getDomains() as $domain) {
+                $importMap[$domain][$locale] = $cataloge;
+            }
         }
-        $data = $response->getContent(false);
-        $data = json_decode($data, true);
-        return array_map(function($lang){
-            return $lang['tag'];
-        },$data['_embedded']['languages']);
+
+        foreach ($importMap as $domain => $locales) {
+            $files = [];
+            foreach ($locales as $locale => $cataloge) {
+                $translations = $cataloge->all($domain);
+                if (!count($translations)) {
+                    continue;
+                }
+                $files[] = $this->createDataPartFile(
+                    $locale,
+                    json_encode($cataloge->all($domain))
+                );
+            }
+            if (!count($files)) {
+                continue;
+            }
+            $fileIds = $this->client->import($files);
+            $this->client->importSelectNamespace($domain, $fileIds);
+            $this->client->importApply('OVERRIDE');
+        }
     }
 }

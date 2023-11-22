@@ -4,12 +4,14 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/9.3/phpunit.xsd"
          backupGlobals="false"
          colors="true"
-         bootstrap="vendor/autoload.php"
+         bootstrap="test/bootstrap.php"
          failOnRisky="true"
          failOnWarning="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
+        <server name="APP_ENV" value="test" force="true" />
+        <server name="KERNEL_CLASS" value="Scarbous\TolgeeTranslationProvider\Test\App\TestKernel" />
     </php>
 
     <testsuites>

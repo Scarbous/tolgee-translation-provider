@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Scarbous\TolgeeTranslationProvider;
 
 use Psr\Log\LoggerInterface;
+use Scarbous\TolgeeTranslationProvider\Http\TolgeeClient as HttpTolgeeClient;
+use Scarbous\TolgeeTranslationProvider\Http\TolgeeClientInterface;
 use Scarbous\TolgeeTranslationProvider\Service\TolgeeClient;
 use Symfony\Component\Translation\Exception\IncompleteDsnException;
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
@@ -55,19 +57,16 @@ final class TolgeeProviderFactory extends AbstractProviderFactory
             throw new UnsupportedSchemeException($dsn, 'tolgee', $this->getSupportedSchemes());
         }
 
-        $serverSchemes = $dsn->getScheme() === 'tolgees' ? 'https' : 'http';
-
-        $endpoint = $dsn->getHost();
-        $endpoint .= $dsn->getPort() ? ':' . $dsn->getPort() : '';
-
         $projectId = (int)$this->getUser($dsn);
 
-        $client = $this->client->withOptions([
-            'base_uri' => sprintf('%s://%s/v2/projects/%d/', $serverSchemes, $endpoint, $projectId),
-            'headers' => [
-                'X-Api-Key' => $this->getPassword($dsn),
-            ],
-        ]);
+        $tolgeeClient = new HttpTolgeeClient(
+            $this->client,
+            $this->getPassword($dsn),
+            $projectId,
+            $dsn->getHost(),
+            $dsn->getPort(),
+            $dsn->getScheme() === 'tolgees',
+        );
 
         if (
             ($filterState = $dsn->getPath() ? trim($dsn->getPath(), '/') : NULL)
@@ -77,11 +76,11 @@ final class TolgeeProviderFactory extends AbstractProviderFactory
         }
 
         return new TolgeeProvider(
-            $client,
+            $tolgeeClient,
             $this->loader,
             $this->logger,
             $this->defaultLocale,
-            $endpoint,
+            $dsn->getHost() . ($dsn->getPort() ? ':' . $dsn->getPort() : ''),
             $dsn->getPath() ? trim($dsn->getPath(), '/') : NULL
         );
     }

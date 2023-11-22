@@ -20,17 +20,22 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Scarbous\\TolgeeTranslationProvider\\Test\\": "test/"
+            "Scarbous\\TolgeeTranslationProvider\\Test\\": "tests/"
         }
     },
     "require": {
         "php": ">=7.2.5",
-        "symfony/config": "5.3.*",
-        "symfony/http-client": "5.3.*",
-        "symfony/translation": "5.3.*"
+        "symfony/config": "5.4.*",
+        "symfony/http-client": "5.4.*",
+        "symfony/intl": "5.4.*",
+        "symfony/mime": "5.4.*"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "*"
+        "symfony/translation": "5.4.*",
+        "symfony/phpunit-bridge": "*",
+        "symfony/framework-bundle": "5.4.*",
+        "symfony/console": "5.4.*",
+        "mockery/mockery": "2.0.x-dev"
     },
     "minimum-stability": "dev"
 }
