@@ -1,0 +1,30 @@
+
+image:
+    file: .gitpod.Dockerfile
+
+tasks:
+  - name: bundle
+    init: composer install --no-interaction --optimize-autoloader
+
+  - name: tolgee dev server
+    init: docker run --restart always --name=tolgee -d -v tolgee_data:/data/ -p 8085:8080 --env-file .gitpod.tolgee.env tolgee/tolgee
+
+
+    
+    command: |
+      docker ps
+      gp ports await 8085
+
+      # show tolgee logs
+      docker logs -f tolgee
+
+ports:
+  - name: tolgee
+    port: 8085
+    onOpen: open-browser
+    description: Tolgee Server
+
+vscode:
+  extensions:
+    - bmewburn.vscode-intelephense-client
+    - felixfbecker.php-debug
