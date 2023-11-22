@@ -1,0 +1,50 @@
+{
+	"errors": [],
+	"result": {
+		"_embedded": {
+			"languages": [
+				{
+					"id": 1000041001,
+					"name": "de",
+					"existingLanguageId": 1000025007,
+					"existingLanguageTag": "de",
+					"existingLanguageAbbreviation": "de",
+					"existingLanguageName": "German",
+					"importFileName": "de.json",
+					"importFileId": 1000040001,
+					"importFileIssueCount": 0,
+					"namespace": null,
+					"totalCount": 1,
+					"conflictCount": 0,
+					"resolvedCount": 0
+				},
+				{
+					"id": 1000041002,
+					"name": "en",
+					"existingLanguageId": 1000025006,
+					"existingLanguageTag": "en",
+					"existingLanguageAbbreviation": "en",
+					"existingLanguageName": "German",
+					"importFileName": "en.json",
+					"importFileId": 1000040002,
+					"importFileIssueCount": 0,
+					"namespace": null,
+					"totalCount": 1,
+					"conflictCount": 0,
+					"resolvedCount": 0
+				}
+			]
+		},
+		"_links": {
+			"self": {
+				"href": "http://localhost:8085/v2/projects/1/import?page=0&size=100"
+			}
+		},
+		"page": {
+			"size": 100,
+			"totalElements": 2,
+			"totalPages": 1,
+			"number": 0
+		}
+	}
+}

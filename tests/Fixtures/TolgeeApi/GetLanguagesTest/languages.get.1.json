@@ -1,0 +1,33 @@
+{
+	"_embedded": {
+		"languages": [
+			{
+				"id": 1000006002,
+				"name": "Italian",
+				"tag": "it",
+				"originalName": "italiano",
+				"flagEmoji": "🇮🇹",
+				"base": false
+			},
+			{
+				"id": 1000025007,
+				"name": "Slovak",
+				"tag": "sk",
+				"originalName": "slovenčina",
+				"flagEmoji": "🇸🇰",
+				"base": false
+			}
+		]
+	},
+	"_links": {
+		"self": {
+			"href": "http://localhost:8085/v2/projects/1/languages?page=0&size=20"
+		}
+	},
+	"page": {
+		"size": 2,
+		"totalElements": 4,
+		"totalPages": 2,
+		"number": 1
+	}
+}

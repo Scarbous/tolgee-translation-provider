@@ -1,0 +1,12 @@
+{
+	"errors": [
+		{
+			"code": "cannot_parse_file",
+			"params": [
+				"de.json",
+				"No content to map due to end-of-input\n at [Source: (ByteArrayInputStream); line: 1, column: 0]"
+			]
+		}
+	],
+	"result": null
+}
