@@ -3,14 +3,20 @@ image:
     file: .gitpod.Dockerfile
 
 tasks:
-  - name: bundle
+  - name: translation-provider
+    openMode: tab-before
     init: composer install --no-interaction --optimize-autoloader
 
   - name: tolgee dev server
-    init: docker run --restart always --name=tolgee -d -v tolgee_data:/data/ -p 8085:8080 --env-file .gitpod.tolgee.env tolgee/tolgee
+    openMode: split-right
+    init: |
+      docker run --restart always --name=tolgee \
+        -d -v tolgee_data:/data/ \
+        -v "$(pwd)/.gitpod/tolgee/importData/:/importData/" \
+        -p 8085:8080 \
+        --env-file ./.gitpod/tolgee/.env \
+        tolgee/tolgee
 
-
-    
     command: |
       docker ps
       gp ports await 8085
@@ -21,7 +27,7 @@ tasks:
 ports:
   - name: tolgee
     port: 8085
-    onOpen: open-browser
+    onOpen: notify
     description: Tolgee Server
 
 vscode:
