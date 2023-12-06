@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Http\Exception;
+namespace Scarbous\TolgeeTranslationProvider\Exception;
 
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
