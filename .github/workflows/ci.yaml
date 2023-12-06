@@ -54,6 +54,7 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         with:
+          version: "9.5"
           coverage_cobertura: "cobertura.xml"
           php_version: "${{ matrix.env.php }}"
           php_extensions: "xdebug"
