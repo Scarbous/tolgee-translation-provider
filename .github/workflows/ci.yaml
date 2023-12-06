@@ -50,15 +50,7 @@ jobs:
         run: composer update --no-progress --ansi --prefer-stable --prefer-lowest
 
       - name: PHPUnit tests
-        uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
-        with:
-          version: "9.5"
-          coverage_cobertura: "cobertura.xml"
-          php_version: "${{ matrix.env.php }}"
-          php_extensions: "xdebug"
-          configuration: "phpunit.xml.dist"
+        run: composer run test-cobertura
 
       - name: "Code Coverage Report"
         if: "${{ matrix.env.php }} == '8.2' && github.event_name == 'pull_request'"
