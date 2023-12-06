@@ -6,7 +6,6 @@ namespace Scarbous\TolgeeTranslationProvider\Test\Fixtures;
 
 class HttpClientFixture
 {
-
     private static function getPath(string $fixture): string
     {
         return __DIR__ . '/' . $fixture;

@@ -2,9 +2,11 @@
 
 namespace Scarbous\TolgeeTranslationProvider;
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TolgeeTranslationProviderBundle extends Bundle
 {
 }

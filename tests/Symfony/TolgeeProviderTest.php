@@ -1,31 +1,16 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Symfony\Component\Translation\Bridge\Lokalise\Tests;
+namespace Scarbous\TolgeeTranslationProvider\Test\Symfony;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\Translation\Bridge\Lokalise\LokaliseProvider;
-use Symfony\Component\Translation\Exception\ProviderException;
 use Symfony\Component\Translation\Loader\ArrayLoader;
 use Symfony\Component\Translation\Loader\LoaderInterface;
-use Symfony\Component\Translation\Loader\XliffFileLoader;
-use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\Provider\ProviderInterface;
 use Symfony\Component\Translation\Test\ProviderTestCase;
 use Symfony\Component\Translation\TranslatorBag;
-use Symfony\Component\Translation\TranslatorBagInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Scarbous\TolgeeTranslationProvider\TolgeeProvider;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
@@ -33,41 +18,51 @@ use Symfony\Component\Translation\Loader\JsonFileLoader;
 class TolgeeProviderTest extends ProviderTestCase
 {
     /**
-     * @return LoaderInterface&MockObject
+     * @return LoaderInterface|MockObject
      */
     protected function getLoader(): LoaderInterface
     {
         return $this->loader ?? $this->loader = $this->createMock(JsonFileLoader::class);
     }
 
-    public function createProvider(HttpClientInterface $client, LoaderInterface $loader, LoggerInterface $logger, string $defaultLocale, string $endpoint): ProviderInterface
+    public static function createProvider($client, LoaderInterface $loader, LoggerInterface $logger, string $defaultLocale, string $endpoint): ProviderInterface
     {
         return new TolgeeProvider($client, $loader, $logger, $defaultLocale, $endpoint);
     }
 
-    public function toStringProvider(): iterable
+    public static  function toStringProvider(): iterable
     {
+        $loader = new JsonFileLoader();
         yield 'app.tolgee.io' => [
-            self::createProvider((new MockHttpClient())->withOptions([
-                'base_uri' => 'https://app.tolgee.io/v2/projects/1337/',
-                'headers' => ['X-Api-Key' => 'API_KEY'],
-            ]), new JsonFileLoader(), new NullLogger(), 'en', 'app.tolgee.io'),
+            self::createProvider(
+                self::getHttpClient(),
+                $loader,
+                new NullLogger(),
+                'en',
+                'app.tolgee.io'
+            ),
             'tolgee://app.tolgee.io',
         ];
 
         yield 'local.dev' => [
-            self::createProvider((new MockHttpClient())->withOptions([
-                'base_uri' => 'https://local.dev/v2/projects/1/',
-                'headers' => ['X-Api-Key' => 'API_KEY'],
-            ]), new JsonFileLoader(), new NullLogger(), 'en', 'local.dev'),
+            self::createProvider(
+                self::getHttpClient(),
+                $loader,
+                new NullLogger(),
+                'en',
+                'local.dev'
+            ),
             'tolgee://local.dev',
         ];
 
         yield 'example.com:99' => [
-            self::createProvider((new MockHttpClient())->withOptions([
-                'base_uri' => 'https://example.com:99/v2/projects/2/',
-                'headers' => ['X-Api-Key' => 'API_KEY'],
-            ]), new JsonFileLoader(), new NullLogger(), 'en', 'example.com:99'),
+            self::createProvider(
+                self::getHttpClient(),
+                $loader,
+                new NullLogger(),
+                'en',
+                'example.com:99'
+            ),
             'tolgee://example.com:99',
         ];
     }
@@ -113,10 +108,9 @@ class TolgeeProviderTest extends ProviderTestCase
             ->method('load')
             ->willReturn((new JsonFileLoader())->load($jsonFile, $locale, $domain));
 
-        $provider = self::createProvider((new MockHttpClient($response))->withOptions([
-            'base_uri' => 'https://app.tolgee.io/v2/projects/1337/',
-            'headers' => ['X-Api-Key' => 'API_KEY'],
-        ]), $loader, $this->getLogger(), $this->getDefaultLocale(), 'api.lokalise.com');
+        $client = self::getHttpClient();
+
+        $provider = self::createProvider($client, $loader, $this->getLogger(), $this->getDefaultLocale(), 'api.lokalise.com');
         $translatorBag = $provider->read([$domain], [$locale]);
         unset($jsonFile);
 
@@ -185,6 +179,7 @@ class TolgeeProviderTest extends ProviderTestCase
     public function testReadForManyLocalesAndManyDomains(array $locales, array $domains, array $responseContents, TranslatorBag $expectedTranslatorBag)
     {
         $response = function (string $method, string $url, array $options = []) use ($locales, $domains, $responseContents): ResponseInterface {
+
             $this->assertSame('GET', $method);
 
             $query = [];
@@ -208,11 +203,8 @@ class TolgeeProviderTest extends ProviderTestCase
                 self::assertEquals(json_encode($responseContents[$domain][$locale]), file_get_contents($resource));
                 return (new ArrayLoader())->load($responseContents[$domain][$locale], $locale, $domain);
             });
-
-        $provider = self::createProvider((new MockHttpClient($response))->withOptions([
-            'base_uri' => 'https://app.tolgee.io/v2/projects/1337/',
-            'headers' => ['X-Api-Key' => 'API_KEY'],
-        ]), $loader, $this->getLogger(), $this->getDefaultLocale(), 'api.lokalise.com');
+        $client = self::getHttpClient($response);
+        $provider = self::createProvider($client, $loader, $this->getLogger(), $this->getDefaultLocale(), 'api.lokalise.com');
 
         $translatorBag = $provider->read($domains, $locales);
 
@@ -221,5 +213,13 @@ class TolgeeProviderTest extends ProviderTestCase
                 $this->assertEquals($expectedTranslatorBag->getCatalogue($locale)->all($domain), $translatorBag->getCatalogue($locale)->all($domain));
             }
         }
+    }
+
+    private static function getHttpClient($response = null): MockHttpClient
+    {
+        return (new MockHttpClient($response))->withOptions([
+            'base_uri' => 'https://app.tolgee.io/v2/projects/1337/',
+            'headers' => ['X-Api-Key' => 'API_KEY'],
+        ]);
     }
 }

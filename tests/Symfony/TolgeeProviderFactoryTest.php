@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test;
+namespace Scarbous\TolgeeTranslationProvider\Test\Symfony;
 
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -20,19 +20,19 @@ class TolgeeProviderFactoryTest extends ProviderFactoryTestCase
      */
     protected $jsonFileDumper;
 
-    public function supportsProvider(): iterable
+    public static function supportsProvider(): iterable
     {
         yield "http" => [true, 'tolgee://1:API_KEY@tolgee.dev'];
         yield "https" => [true, 'tolgees://2:API_KEY@tolgee.dev:8080'];
         yield "wrong shema" => [false, 'somethingElse://1:API_KEY@app.tolgee.io'];
     }
 
-    public function unsupportedSchemeProvider(): iterable
+    public static function unsupportedSchemeProvider(): iterable
     {
         yield "wrong shema" => ['somethingElse://1:API_KEY@app.tolgee.io'];
     }
 
-    public function createProvider(): iterable
+    public static function createProvider(): iterable
     {
         yield 'http' => [
             'tolgee://app.tolgee.io',
@@ -44,7 +44,7 @@ class TolgeeProviderFactoryTest extends ProviderFactoryTestCase
         ];
     }
 
-    public function incompleteDsnProvider(): iterable
+    public static function incompleteDsnProvider(): iterable
     {
         yield "mising password and user - http" => [
             'tolgee://default',

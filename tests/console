@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+use Scarbous\TolgeeTranslationProvider\Test\App\TestKernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
+
+$_ENV['TOLGEE_DSN']='tolgee://1:test-admim-imported-project-implicit@localhost:8085';
+
+$input = new ArgvInput();
+$kernel = new TestKernel('test',true);
+$application = new Application($kernel);
+$application->run($input);
+

@@ -23,22 +23,29 @@ class TestKernel extends \Symfony\Component\HttpKernel\Kernel
         ];
     }
 
+    protected function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(
+            new \Scarbous\TolgeeTranslationProvider\Test\App\DependencyInjection\PublicHttpClientPass()
+        );
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function (ContainerBuilder $container) {
             $container->loadFromExtension('framework', [
                 'secret' => 'SOME_SECRET',
                 'test' => true,
+                "enabled_locales" => ["en", "de"],
                 "translator" => [
                     "enabled" => true,
                     "default_path" => '%kernel.project_dir%/translations',
-                    "enabled_locales" => ["en", "de", "sk"],
                     "providers" => [
                         "tolgee" => [
                             "dsn" => '%env(TOLGEE_DSN)%'
                         ]
                     ]
-                ],
+                ]
             ]);
         });
     }

@@ -13,17 +13,17 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Scarbous\TolgeeTranslationProvider\TolgeeProviderFactory;
 
+// @codeCoverageIgnoreStart
 return static function (ContainerConfigurator $container) {
     $container->services()
-
         ->set('translation.provider_factory.tolgee', TolgeeProviderFactory::class)
         ->autowire(true)
         ->args([
             service('http_client'),
             service('logger'),
             param('kernel.default_locale'),
-            service('translation.loader.json'),
-            service('translation.dumper.json')
+            service('translation.loader.json')
         ])
         ->tag('translation.provider_factory');
 };
+// @codeCoverageIgnoreEnd
