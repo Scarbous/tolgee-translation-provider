@@ -12,6 +12,7 @@
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="KERNEL_CLASS" value="Scarbous\TolgeeTranslationProvider\Test\App\TestKernel" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
         <env name="TOLGEE_DSN" value="tolgee://1:test-admim-imported-project-implicit@tolgee.local/"/>
     </php>
 
