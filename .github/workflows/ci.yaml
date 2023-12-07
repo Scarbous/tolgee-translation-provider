@@ -41,7 +41,15 @@ jobs:
         run: composer validate --no-interaction --ansi
 
       - name: PHPUnit tests
-        run: composer run test-cobertura
+        uses: php-actions/phpunit@v3
+        env:
+          XDEBUG_MODE: coverage
+        with:
+          version: "9.5"
+          coverage_cobertura: "cobertura.xml"
+          php_version: "${{ matrix.env.php }}"
+          php_extensions: "xdebug"
+          configuration: "phpunit.xml.dist"
 
       - name: "Code Coverage Report"
         if: "${{ matrix.env.php }} == '8.2' && github.event_name == 'pull_request'"
