@@ -65,7 +65,7 @@ class TolgeeProviderTest extends KernelTestCase
                 );
             }
 
-            return new MockResponse($data ?? null);
+            return new MockResponse($data ?? '');
         });
 
         $tb = $this->getTolgeeProvider()->read([], []);
@@ -122,7 +122,6 @@ class TolgeeProviderTest extends KernelTestCase
                 $data = HttpClientFixture::getPagedData($fixture, 'languages', $method, $page);
                 $expectedRequests['GET::languages']--;
             } elseif ($method == 'DELETE' && strpos($url, '/import') > 1) {
-                $data = null;
                 $expectedRequests['DELETE::import']--;
             } elseif ($method == 'POST' && strpos($url, '/languages') > 1) {
                 $data = HttpClientFixture::getData($fixture, 'languages', $method);
@@ -171,7 +170,7 @@ class TolgeeProviderTest extends KernelTestCase
                 ]);
             }
 
-            return new MockResponse($data ?? null);
+            return new MockResponse($data ?? '');
         });
 
         $translatorBag = new TranslatorBag();
@@ -225,7 +224,7 @@ class TolgeeProviderTest extends KernelTestCase
                 $expectedRequests['DELETE::keys']--;
             }
 
-            return new MockResponse($data ?? null);
+            return new MockResponse($data ?? '');
         });
 
         $this->getTolgeeProvider()->delete($translatorBag);
