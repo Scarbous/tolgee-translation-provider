@@ -47,7 +47,7 @@ jobs:
         run: composer update --no-progress --ansi --prefer-stable
 
       - name: Validate composer.json and composer.lock
-        run: composer update --no-progress --ansi --prefer-stable --prefer-lowest
+        run: composer validate --no-progress --ansi
 
       - name: PHPUnit tests
         run: composer run test-cobertura
