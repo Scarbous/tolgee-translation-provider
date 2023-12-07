@@ -1,6 +1,14 @@
 name: CI
 
-on: [ push, pull_request ]
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
@@ -16,6 +24,9 @@ jobs:
           - { php: 8.2, symfony: 5.4 }
           - { php: 8.1, symfony: 6.4 }
           - { php: 8.2, symfony: 6.4 }
+          - { php: 8.3, symfony: 6.4 }
+          - { php: 8.2, symfony: 7.1, experimental: true }
+          - { php: 8.3, symfony: 7.1, experimental: true }
 
     steps:
       - uses: actions/checkout@v3
@@ -46,13 +57,47 @@ jobs:
           XDEBUG_MODE: coverage
         with:
           version: "9.5"
-          coverage_cobertura: "cobertura.xml"
+          coverage_php: "Build/test.${{ matrix.env.php }}.cov"
           php_version: "${{ matrix.env.php }}"
           php_extensions: "xdebug"
           configuration: "phpunit.xml.dist"
 
+      - name: upload coverage file
+        if: "github.event_name == 'pull_request'"
+        uses: actions/upload-artifact@v3
+        with:
+            name: coverage
+            path: Build
+
+      - name: upload composer.lock on fail
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+            name: |
+              composer.json
+              composer.lock
+            path: composer.lock
+
+  coverage_report:
+    runs-on: ubuntu-latest
+    if: "github.event_name == 'pull_request'"
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: coverage
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.env.php }}
+
+      - name: 'install phpcov'
+        run: composer req phpunit/phpcov
+      
+      - name: 'merge coverage files'
+        run: vendor/bin/phpcov merge --cobertura cobertura.xml ./Build
+
       - name: "Code Coverage Report"
-        if: "${{ matrix.env.php }} == '8.2' && github.event_name == 'pull_request'"
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: cobertura.xml
@@ -66,7 +111,6 @@ jobs:
           thresholds: '60 80'
 
       - name: Add Coverage PR Comment
-        if: "${{ matrix.env.php }} == '8.2' && github.event_name == 'pull_request'"
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
