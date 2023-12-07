@@ -79,6 +79,7 @@ jobs:
             path: composer.lock
 
   coverage_report:
+    needs: test
     runs-on: ubuntu-latest
     if: "github.event_name == 'pull_request'"
     steps:
