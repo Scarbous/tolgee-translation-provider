@@ -20,15 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: start tolgee
-        run: |
-          docker run --restart always --name=tolgee \
-            -d -v tolgee_data:/data/ \
-            -v "$(pwd)/.gitpod/tolgee/importData/:/importData/" \
-            -p 8085:8080 \
-            --env-file ./.gitpod/tolgee/.env \
-            tolgee/tolgee
-
       - name: Composer cache
         uses: actions/cache@v3
         with:
@@ -47,7 +38,7 @@ jobs:
         run: composer update --no-progress --ansi --prefer-stable
 
       - name: Validate composer.json and composer.lock
-        run: composer validate --no-progress --ansi
+        run: composer validate --no-interaction --ansi
 
       - name: PHPUnit tests
         run: composer run test-cobertura
