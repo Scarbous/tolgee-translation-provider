@@ -43,6 +43,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.env.php }}
+          coverage: pcov
 
       - name: Configure Symfony
         run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
@@ -55,8 +56,6 @@ jobs:
 
       - name: PHPUnit tests
         uses: php-actions/phpunit@v3
-        env:
-          XDEBUG_MODE: coverage
         with:
           version: "9.5"
           coverage_php: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
@@ -64,43 +63,45 @@ jobs:
           coverage_cobertura: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cobertura.xml"
           coverage_crap4j: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.crap4j.xml"
           php_version: "${{ matrix.env.php }}"
-          php_extensions: "xdebug"
           configuration: "phpunit.xml.dist"
 
       - name: upload coverage file
-        if: "github.event_name == 'pull_request'"
+        if: "${{github.event_name}} == 'pull_request'"
         uses: actions/upload-artifact@v3
         with:
-            name: coverage
-            path: Build
+          name: coverage
+          path: Build
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
         with:
-            name: "composer.${{ matrix.env.php }}.${{ matrix.env.symfony }}"
-            path: |
-              composer.json
-              composer.lock
+          name: "composer.${{ matrix.env.php }}.${{ matrix.env.symfony }}"
+          path: |
+            composer.json
+            composer.lock
 
   coverage_report:
     needs: test
     runs-on: ubuntu-latest
-    if: "github.event_name == 'pull_request'"
+    if: "${{ github.event_name }} == 'pull_request'"
     steps:
+      - uses: actions/checkout@v3
+
       - uses: actions/download-artifact@v3
         with:
           name: coverage
-          path: Build
+          path: coverage
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
+          coverage: pcov
 
-      - name: 'install phpcov'
-        run: composer -n require --dev php-coveralls/php-coveralls
-      
+      - name: Install phpcov
+        run: composer req --no-progress -n phpunit/phpcov
+
       - name: 'merge coverage files'
         run: vendor/bin/phpcov merge --cobertura cobertura.xml ./Build
 
