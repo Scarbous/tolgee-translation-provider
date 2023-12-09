@@ -45,7 +45,7 @@ jobs:
           php-version: ${{ matrix.env.php }}
 
       - name: Configure Symfony
-        run: composer config extra.symfony.require "${{ matrix.symfony }}"
+        run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
 
       - name: Install composer
         run: composer update --no-progress --ansi --prefer-stable
@@ -59,10 +59,10 @@ jobs:
           XDEBUG_MODE: coverage
         with:
           version: "9.5"
-          coverage_php: "Build/test.${{ matrix.env.php }}.${{ matrix.symfony }}.cov"
-          coverage_clover: "Build/test.${{ matrix.env.php }}.${{ matrix.symfony }}.clover.xml"
-          coverage_cobertura: "Build/test.${{ matrix.env.php }}.${{ matrix.symfony }}.cobertura.xml"
-          coverage_crap4j: "Build/test.${{ matrix.env.php }}.${{ matrix.symfony }}.crap4j.xml"
+          coverage_php: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
+          coverage_clover: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.clover.xml"
+          coverage_cobertura: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cobertura.xml"
+          coverage_crap4j: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.crap4j.xml"
           php_version: "${{ matrix.env.php }}"
           php_extensions: "xdebug"
           configuration: "phpunit.xml.dist"
@@ -78,7 +78,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
         with:
-            name: composer.${{ matrix.env.php }}.${{ matrix.symfony }}
+            name: "composer.${{ matrix.env.php }}.${{ matrix.env.symfony }}"
             path: |
               composer.json
               composer.lock
@@ -96,7 +96,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.env.php }}
+          php-version: 8.2
 
       - name: 'install phpcov'
         run: composer -n require --dev php-coveralls/php-coveralls
