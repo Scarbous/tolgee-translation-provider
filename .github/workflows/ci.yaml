@@ -12,6 +12,7 @@ on:
 
 jobs:
   test:
+    name: "PHP ${{ matrix.env.php }} - Symfony ${{ matrix.env.symfony }}"
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.env.experimental == true }}
     strategy:
@@ -67,13 +68,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: coverage
+          path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
         uses: actions/upload-artifact@v3
         with:
-          name: "composer.${{ matrix.env.php }}.${{ matrix.env.symfony }}"
+          name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}"
           path: |
             composer.json
             composer.lock
