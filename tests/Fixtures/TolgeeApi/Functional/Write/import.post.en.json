@@ -1,0 +1,35 @@
+{
+	"errors": [],
+	"result": {
+		"_embedded": {
+			"languages": [
+				{
+					"id": 1000028001,
+					"name": "en",
+					"existingLanguageId": 1000000001,
+					"existingLanguageTag": "en",
+					"existingLanguageAbbreviation": "en",
+					"existingLanguageName": "en",
+					"importFileName": "en.json",
+					"importFileId": 1000027002,
+					"importFileIssueCount": 0,
+					"namespace": 'null',
+					"totalCount": 1,
+					"conflictCount": 0,
+					"resolvedCount": 0
+				}
+			]
+		},
+		"_links": {
+			"self": {
+				"href": "http://tolgee.local/v2/projects/1/import?page=0&size=100"
+			}
+		},
+		"page": {
+			"size": 100,
+			"totalElements": 1,
+			"totalPages": 1,
+			"number": 0
+		}
+	}
+}

@@ -1,0 +1,46 @@
+{
+    "name": "scarbous/tolgee-translation-provider",
+    "description": "Symfony Tolgee Translation Provider Bridge",
+    "type": "symfony-bridge",
+    "keywords": [
+        "tolgee",
+        "translation",
+        "provider"
+    ],
+    "authors": [
+        {
+            "name": "Sascha Heilmeier"
+        }
+    ],
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Scarbous\\TolgeeTranslationProvider\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scarbous\\TolgeeTranslationProvider\\Test\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.2 || ^8.0 || ^8.1 || ^8.2",
+        "symfony/config": "^5.4 || ^6.4",
+        "symfony/http-client": "^5.4 || ^6.4",
+        "symfony/intl": "^5.4 || ^6.4",
+        "symfony/mime": "^5.4 || ^6.4",
+        "symfony/polyfill-intl-icu": "^1.28"
+    },
+    "require-dev": {
+        "symfony/translation": "^5.4 || ^6.4",
+        "symfony/phpunit-bridge": "*",
+        "symfony/framework-bundle": "^5.4 || ^6.4",
+        "symfony/console": "^5.4 || ^6.4",
+        "phpunit/phpunit": "^9.6",
+        "mockery/mockery": "^1.6"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-html=coverage"
+    }
+}

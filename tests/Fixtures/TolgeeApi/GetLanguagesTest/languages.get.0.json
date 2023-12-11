@@ -1,0 +1,33 @@
+{
+	"_embedded": {
+		"languages": [
+			{
+				"id": 1000025006,
+				"name": "German",
+				"tag": "de",
+				"originalName": "Deutsch",
+				"flagEmoji": "🇩🇪",
+				"base": false
+			},
+			{
+				"id": 1000000001,
+				"name": "English",
+				"tag": "en",
+				"originalName": "English",
+				"flagEmoji": "🇬🇧",
+				"base": true
+			}
+		]
+	},
+	"_links": {
+		"self": {
+			"href": "http://localhost:8085/v2/projects/1/languages?page=0&size=20"
+		}
+	},
+	"page": {
+		"size": 2,
+		"totalElements": 4,
+		"totalPages": 2,
+		"number": 0
+	}
+}

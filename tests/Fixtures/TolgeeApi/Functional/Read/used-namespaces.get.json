@@ -1,0 +1,14 @@
+{
+	"_embedded": {
+		"namespaces": [
+			{
+				"id": 1000007001,
+				"name": "message"
+			},
+			{
+				"id": 1000007002,
+				"name": "validation"
+			}
+		]
+	}
+}

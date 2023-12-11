@@ -26,3 +26,18 @@ where:
 You get the project ID from the project URL.
 
 [Generate an API key on Tolge](https://app.tolgee.io/account/apiKeys)
+
+DevSetup
+-----------
+
+If you want to develop this package, you can use [gitpod.io](https://gitpod.io/) to start a development environment with all dependencies installed.
+
+It also starts a local Tolgee server with a test project.
+http://localhost:8085
+
+You can use the following commands to pull and push translations from/to Tolgee server.
+
+```bash
+tests/console translation:pull
+tests/console translation:push
+```

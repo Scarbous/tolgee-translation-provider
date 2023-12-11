@@ -1,0 +1,8 @@
+/composer.lock
+/vendor
+
+/coverage
+/tests/App/var
+/tests/App/translations
+
+/.phpunit.result.cache

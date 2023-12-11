@@ -1,0 +1,36 @@
+
+image:
+    file: .gitpod.Dockerfile
+
+tasks:
+  - name: translation-provider
+    openMode: tab-before
+    init: composer install --no-interaction --optimize-autoloader
+
+  - name: tolgee dev server
+    openMode: split-right
+    init: |
+      docker run --restart always --name=tolgee \
+        -d -v tolgee_data:/data/ \
+        -v "$(pwd)/.gitpod/tolgee/importData/:/importData/" \
+        -p 8085:8080 \
+        --env-file ./.gitpod/tolgee/.env \
+        tolgee/tolgee
+
+    command: |
+      docker ps
+      gp ports await 8085
+
+      # show tolgee logs
+      docker logs -f tolgee
+
+ports:
+  - name: tolgee
+    port: 8085
+    onOpen: notify
+    description: Tolgee Server
+
+vscode:
+  extensions:
+    - bmewburn.vscode-intelephense-client
+    - felixfbecker.php-debug
