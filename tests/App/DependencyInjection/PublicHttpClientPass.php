@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 
-namespace Scarbous\TolgeeTranslationProvider\Test\App\DependencyInjection;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\App\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 

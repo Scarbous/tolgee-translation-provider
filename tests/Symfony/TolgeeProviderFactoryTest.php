@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Symfony;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Symfony;
 
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Scarbous\TolgeeTranslationProvider\TolgeeProviderFactory as ProviderFactory;
+use Netlogix\SymfonyTolgeeTranslationProvider\TolgeeProviderFactory as ProviderFactory;
 use Symfony\Component\Translation\Dumper\JsonFileDumper;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 use Symfony\Component\Translation\Provider\Dsn;

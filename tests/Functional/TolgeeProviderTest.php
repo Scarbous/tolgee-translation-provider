@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Functional;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Functional;
 
-use Scarbous\TolgeeTranslationProvider\Test\Fixtures\HttpClientFixture;
+use Netlogix\SymfonyTolgeeTranslationProvider\Test\Fixtures\HttpClientFixture;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;

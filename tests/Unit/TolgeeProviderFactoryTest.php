@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Unit;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Unit;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Scarbous\TolgeeTranslationProvider\TolgeeProviderFactory;
+use Netlogix\SymfonyTolgeeTranslationProvider\TolgeeProviderFactory;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Translation\Exception\IncompleteDsnException;
 use Symfony\Component\Translation\Exception\UnsupportedSchemeException;

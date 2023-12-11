@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Symfony;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Symfony;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -12,7 +13,7 @@ use Symfony\Component\Translation\Provider\ProviderInterface;
 use Symfony\Component\Translation\Test\ProviderTestCase;
 use Symfony\Component\Translation\TranslatorBag;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Scarbous\TolgeeTranslationProvider\TolgeeProvider;
+use Netlogix\SymfonyTolgeeTranslationProvider\TolgeeProvider;
 use Symfony\Component\Translation\Loader\JsonFileLoader;
 
 class TolgeeProviderTest extends ProviderTestCase
