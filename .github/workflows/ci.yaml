@@ -56,16 +56,12 @@ jobs:
         run: composer validate --no-interaction --ansi
 
       - name: PHPUnit tests
-        uses: php-actions/phpunit@v3
         env:
           XDEBUG_MODE: coverage
-        with:
-          version: "9.5"
-          coverage_php: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
-          php_version: "${{ matrix.env.php }}"
-          php_extensions: "xdebug"
-          configuration: "phpunit.xml.dist"
-
+        run: vendor/bin/phpunit \
+          --configuration phpunit.xml.dist \
+          --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
+  
       - name: upload coverage file
         if: "${{github.event_name}} == 'pull_request'"
         uses: actions/upload-artifact@v3
