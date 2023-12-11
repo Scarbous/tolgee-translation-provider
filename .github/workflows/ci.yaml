@@ -58,10 +58,7 @@ jobs:
         uses: php-actions/phpunit@v3
         with:
           version: "9.5"
-          coverage_php: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
-          coverage_clover: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.clover.xml"
-          coverage_cobertura: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cobertura.xml"
-          coverage_crap4j: "Build/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.crap4j.xml"
+          coverage_php: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
           php_version: "${{ matrix.env.php }}"
           configuration: "phpunit.xml.dist"
 
@@ -70,7 +67,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: coverage
-          path: Build
+          path: coverage
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
@@ -103,7 +100,7 @@ jobs:
         run: composer req --no-progress -n phpunit/phpcov
 
       - name: 'merge coverage files'
-        run: vendor/bin/phpcov merge --cobertura cobertura.xml ./Build
+        run: vendor/bin/phpcov merge --cobertura cobertura.xml ./coverage
 
       - name: "Code Coverage Report"
         uses: irongut/CodeCoverageSummary@v1.3.0
