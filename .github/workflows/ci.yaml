@@ -61,6 +61,7 @@ jobs:
           version: "9.5"
           coverage_php: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
           php_version: "${{ matrix.env.php }}"
+          php_extensions: "xdebug"
           configuration: "phpunit.xml.dist"
 
       - name: upload coverage file
