@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Unit;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Scarbous\TolgeeTranslationProvider\Exception\TolgeeException;
-use Scarbous\TolgeeTranslationProvider\Test\Fixtures\HttpClientFixture;
-use Scarbous\TolgeeTranslationProvider\TolgeeProvider;
+use Netlogix\SymfonyTolgeeTranslationProvider\Exception\TolgeeException;
+use Netlogix\SymfonyTolgeeTranslationProvider\Test\Fixtures\HttpClientFixture;
+use Netlogix\SymfonyTolgeeTranslationProvider\TolgeeProvider;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Mime\Part\DataPart;

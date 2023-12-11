@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\Fixtures;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\Fixtures;
 
 class HttpClientFixture
 {

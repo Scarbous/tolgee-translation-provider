@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\DependencyInjection;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
