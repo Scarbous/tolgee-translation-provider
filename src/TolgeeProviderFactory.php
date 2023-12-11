@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider;
+namespace Netlogix\SymfonyTolgeeTranslationProvider;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Translation\Exception\IncompleteDsnException;

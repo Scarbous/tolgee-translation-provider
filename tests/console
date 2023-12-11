@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-use Scarbous\TolgeeTranslationProvider\Test\App\TestKernel;
+use Netlogix\SymfonyTolgeeTranslationProvider\Test\App\TestKernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 

@@ -1,6 +1,7 @@
 <?php
+declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider;
+namespace Netlogix\SymfonyTolgeeTranslationProvider;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

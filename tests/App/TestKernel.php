@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider\Test\App;
+namespace Netlogix\SymfonyTolgeeTranslationProvider\Test\App;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -19,14 +19,14 @@ class TestKernel extends \Symfony\Component\HttpKernel\Kernel
     {
         return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Scarbous\TolgeeTranslationProvider\TolgeeTranslationProviderBundle(),
+            new \Netlogix\SymfonyTolgeeTranslationProvider\TolgeeTranslationProviderBundle(),
         ];
     }
 
     protected function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(
-            new \Scarbous\TolgeeTranslationProvider\Test\App\DependencyInjection\PublicHttpClientPass()
+            new \Netlogix\SymfonyTolgeeTranslationProvider\Test\App\DependencyInjection\PublicHttpClientPass()
         );
     }
 

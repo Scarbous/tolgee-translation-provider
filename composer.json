@@ -1,6 +1,12 @@
 {
-    "name": "scarbous/tolgee-translation-provider",
+    "name": "netlogix/symfony-tolgee-translation-provider",
     "description": "Symfony Tolgee Translation Provider Bridge",
+    "homepage": "https://github.com/netlogix/symfony-tolgee-translation-provider",
+    "support":{
+      "source": "https://github.com/netlogix/symfony-tolgee-translation-provider/",
+      "docs": "https://github.com/netlogix/symfony-tolgee-translation-provider/blob/main/README.md",
+      "issues": "https://github.com/netlogix/symfony-tolgee-translation-provider/issues"
+    },
     "type": "symfony-bridge",
     "keywords": [
         "tolgee",
@@ -9,18 +15,19 @@
     ],
     "authors": [
         {
-            "name": "Sascha Heilmeier"
+            "name": "Sascha Heilmeier",
+            "email": "sascha.heilmeier@netlogix.de"
         }
     ],
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Scarbous\\TolgeeTranslationProvider\\": "src/"
+            "Netlogix\\SymfonyTolgeeTranslationProvider\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Scarbous\\TolgeeTranslationProvider\\Test\\": "tests/"
+            "Netlogix\\SymfonyTolgeeTranslationProvider\\Test\\": "tests/"
         }
     },
     "require": {

@@ -1,18 +1,11 @@
 <?php
 
-/*
- * This file is part of the Symfony package.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+declare(strict_types=1);
 
-namespace Scarbous\TolgeeTranslationProvider;
+namespace Netlogix\SymfonyTolgeeTranslationProvider;
 
 use Psr\Log\LoggerInterface;
-use Scarbous\TolgeeTranslationProvider\Exception\TolgeeException;
+use Netlogix\SymfonyTolgeeTranslationProvider\Exception\TolgeeException;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\RedirectionException;
 use Symfony\Component\HttpClient\Exception\ServerException;
