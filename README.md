@@ -1,4 +1,4 @@
-Tolge Translation Provider
+Tolgee Translation Provider
 =============================
 
 Provides [Tolge](https://tolgee.io/) integration for Symfony Translation.
