@@ -8,7 +8,7 @@ DSN example
 
 For https:
 ```
-DSN=tolgee://PROJECT_ID:API_KEY@default/FILTER_STATES
+DSN=tolgees://PROJECT_ID:API_KEY@default/FILTER_STATES
 ```
 
 For http:
