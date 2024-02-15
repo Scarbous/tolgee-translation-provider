@@ -174,7 +174,7 @@ class TolgeeProvider implements ProviderInterface
         return new DataPart(
             $content,
             sprintf('%s.json', $name),
-            'application/json',
+            'application/json'
         );
     }
 
@@ -299,7 +299,7 @@ class TolgeeProvider implements ProviderInterface
                     'body' => json_encode([
                         'namespace' => $namespace
                     ])
-                ],
+                ]
             );
             try {
                 $this->checkResponseStatusCode($response);
