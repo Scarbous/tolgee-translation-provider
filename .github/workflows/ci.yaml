@@ -50,7 +50,7 @@ jobs:
         run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
 
       - name: Install composer
-        run: composer update --no-progress --ansi --prefer-stable
+        run: composer update --no-progress --ansi --prefer-lowest --no-interaction --with symfony/translation="${{ matrix.env.symfony }}"
 
       - name: Validate composer.json and composer.lock
         run: composer validate --no-interaction --ansi
@@ -64,14 +64,14 @@ jobs:
   
       - name: upload coverage file
         if: "${{github.event_name}} == 'pull_request'"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage
           path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}"
           path: |
@@ -85,7 +85,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: coverage
           path: coverage

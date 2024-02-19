@@ -31,18 +31,18 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0 || ^8.1 || ^8.2",
-        "symfony/config": "^5.4 || ^6.4",
-        "symfony/http-client": "^5.4 || ^6.4",
-        "symfony/intl": "^5.4 || ^6.4",
-        "symfony/mime": "^5.4 || ^6.4",
-        "symfony/polyfill-intl-icu": "^1.28"
+        "php": "^7.2 || ^8.0 || ^8.1 || ^8.2 || ^8.3",
+        "symfony/config": "^5.4 || ^6.4 || ^7.0",
+        "symfony/http-client": "^5.4 || ^6.4 || ^7.0",
+        "symfony/intl": "^5.4 || ^6.4 || ^7.0",
+        "symfony/mime": "^5.4 || ^6.4 || ^7.0",
+        "symfony/polyfill-intl-icu": "^1.28",
+        "symfony/translation": "^5.4 || ^6.4 || ^7.0"
     },
     "require-dev": {
-        "symfony/translation": "^5.4 || ^6.4",
         "symfony/phpunit-bridge": "*",
-        "symfony/framework-bundle": "^5.4 || ^6.4",
-        "symfony/console": "^5.4 || ^6.4",
+        "symfony/framework-bundle": "*",
+        "symfony/console": "*",
         "phpunit/phpunit": "^9.6",
         "mockery/mockery": "^1.6"
     },
