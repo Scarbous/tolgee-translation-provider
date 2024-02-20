@@ -32,12 +32,12 @@
     },
     "require": {
         "php": "^7.2|^8.0|^8.1|^8.2|^8.3|^8.4",
-        "symfony/config": "^5.4|^6.4|^7.0",
-        "symfony/http-client": "^5.4|^6.4|^7.0",
-        "symfony/intl": "^5.4|^6.4|^7.0",
-        "symfony/mime": "^5.4|^6.4|^7.0",
+        "symfony/config": "^5.4|^6.4|^7.1",
+        "symfony/http-client": "^5.4|^6.4|^7.1",
+        "symfony/intl": "^5.4|^6.4|^7.1",
+        "symfony/mime": "^5.4|^6.4|^7.1",
         "symfony/polyfill-intl-icu": "^1.28",
-        "symfony/translation": "^5.4.21|^6.4|^7.0"
+        "symfony/translation": "^5.4.21|^6.4|^7.1"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "*",
