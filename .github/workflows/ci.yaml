@@ -18,6 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        prefer: [dist, lowest, highest]
         env:
           - { php: 7.4, symfony: 5.4 }
           - { php: 8.0, symfony: 5.4 }
@@ -38,7 +39,10 @@ jobs:
         uses: actions/cache@v3
         with:
           path: "vendor"
-          key: ${{ runner.os }}-${{ matrix.env.php }}-composer-${{ hashFiles('composer.json') }}
+          key: ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}-composer-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}-composer-${{ matrix.prefer }}
+            ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -50,7 +54,7 @@ jobs:
         run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
 
       - name: Install composer
-        run: composer update --no-progress --ansi --prefer-lowest --no-interaction --with symfony/translation="${{ matrix.env.symfony }}"
+        run: composer update --no-progress --ansi --prefer-${{ matrix.prefer }} --no-interaction --with symfony/translation="${{ matrix.env.symfony }}"
 
       - name: Validate composer.json and composer.lock
         run: composer validate --no-interaction --ansi
