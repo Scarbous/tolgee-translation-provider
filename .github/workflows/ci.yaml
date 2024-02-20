@@ -12,12 +12,13 @@ on:
 
 jobs:
   test:
-    name: "PHP ${{ matrix.env.php }} - Symfony ${{ matrix.env.symfony }}"
+    name: "PHP ${{ matrix.env.php }} - Symfony ${{ matrix.env.symfony }} - prefer-${{ matrix.prefer }}"
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.env.experimental == true }}
     strategy:
       fail-fast: false
       matrix:
+        prefer: [lowest, stable]
         env:
           - { php: 7.4, symfony: 5.4 }
           - { php: 8.0, symfony: 5.4 }
@@ -34,23 +35,35 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Composer Cache Vars
+        id: composer-cache-vars
+        run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "timestamp=$(date +"%s")" >> $GITHUB_OUTPUT
+
       - name: Composer cache
         uses: actions/cache@v3
         with:
-          path: "vendor"
-          key: ${{ runner.os }}-${{ matrix.env.php }}-composer-${{ hashFiles('composer.json') }}
+          path: ${{ steps.composer-cache-vars.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}-composer-${{ matrix.prefer }}-${{ hashFiles('composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}-composer-${{ matrix.prefer }}-
+            ${{ runner.os }}-${{ matrix.env.php }}-${{ matrix.env.symfony }}-
+            ${{ runner.os }}-${{ matrix.env.php }}-
+            ${{ runner.os }}-
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.env.php }}
+          tools: composer:v2
           coverage: pcov
 
       - name: Configure Symfony
-        run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
+        run: composer config extra.symfony.require "${{ matrix.env.symfony }}.*"
 
       - name: Install composer
-        run: composer update --no-progress --ansi --prefer-stable
+        run: composer update --no-progress --ansi --prefer-${{ matrix.prefer }} --prefer-dist --no-interaction --with symfony/translation="${{ matrix.env.symfony }}.*"
 
       - name: Validate composer.json and composer.lock
         run: composer validate --no-interaction --ansi
@@ -58,22 +71,22 @@ jobs:
       - name: PHPUnit tests
         env:
           XDEBUG_MODE: coverage
-        run: vendor/bin/phpunit \
+        run: composer exec simple-phpunit \
           --configuration phpunit.xml.dist \
-          --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
-  
+          --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}.cov"
+
       - name: upload coverage file
         if: "${{github.event_name}} == 'pull_request'"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: coverage
-          path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
+          name: coverage.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}
+          path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}.cov"
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}"
+          name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}.${{ matrix.prefer }}"
           path: |
             composer.json
             composer.lock
@@ -85,10 +98,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
-          name: coverage
+          pattern: coverage-*
           path: coverage
+          merge-multiple: true
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -99,20 +113,20 @@ jobs:
       - name: Install phpcov
         run: composer req --no-progress -n phpunit/phpcov
 
-      - name: 'merge coverage files'
+      - name: "merge coverage files"
         run: vendor/bin/phpcov merge --clover coverage/clover.xml ./coverage
 
-      - name: 'Generate code coverage summary report'
+      - name: "Generate code coverage summary report"
         uses: saschanowak/CloverCodeCoverageSummary@0.4.0
         with:
           filename: coverage/clover.xml
 
-      - name: 'Add code coverage summary as action run comment'
+      - name: "Add code coverage summary as action run comment"
         run: |
           cat code-coverage-summary.md >> $GITHUB_STEP_SUMMARY
           cat code-coverage-details.md >> $GITHUB_STEP_SUMMARY
 
-      - name: 'Add code coverage summary as pr comment'
+      - name: "Add code coverage summary as pr comment"
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true

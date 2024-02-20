@@ -31,20 +31,20 @@
         }
     },
     "require": {
-        "php": "^7.2 || ^8.0 || ^8.1 || ^8.2",
-        "symfony/config": "^5.4 || ^6.4",
-        "symfony/http-client": "^5.4 || ^6.4",
-        "symfony/intl": "^5.4 || ^6.4",
-        "symfony/mime": "^5.4 || ^6.4",
-        "symfony/polyfill-intl-icu": "^1.28"
+        "php": "^7.2|^8.0|^8.1|^8.2|^8.3|^8.4",
+        "symfony/config": "^5.4|^6.4|^7.1",
+        "symfony/http-client": "^5.4|^6.4|^7.1",
+        "symfony/intl": "^5.4|^6.4|^7.1",
+        "symfony/mime": "^5.4|^6.4|^7.1",
+        "symfony/polyfill-intl-icu": "^1.28",
+        "symfony/translation": "^5.4.21|^6.4|^7.1"
     },
     "require-dev": {
-        "symfony/translation": "^5.4 || ^6.4",
-        "symfony/phpunit-bridge": "*",
-        "symfony/framework-bundle": "^5.4 || ^6.4",
-        "symfony/console": "^5.4 || ^6.4",
-        "phpunit/phpunit": "^9.6",
-        "mockery/mockery": "^1.6"
+        "symfony/phpunit-bridge": "^5.4|^6.4|^7.1",
+        "symfony/framework-bundle": "*",
+        "symfony/console": "*",
+        "mockery/mockery": "^1.6",
+        "composer/composer": "^2.7"
     },
     "scripts": {
         "test": "phpunit",
