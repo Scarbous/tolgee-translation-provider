@@ -12,7 +12,7 @@ on:
 
 jobs:
   test:
-    name: "PHP ${{ matrix.env.php }} - Symfony ${{ matrix.env.symfony }}"
+    name: "PHP ${{ matrix.env.php }} - Symfony ${{ matrix.env.symfony }} - prefer-${{ matrix.prefer }}"
     runs-on: ubuntu-latest
     continue-on-error: ${{ matrix.env.experimental == true }}
     strategy:
@@ -54,7 +54,7 @@ jobs:
         run: composer config extra.symfony.require "${{ matrix.env.symfony }}"
 
       - name: Install composer
-        run: composer update --no-progress --ansi --prefer-${{ matrix.prefer }} --no-interaction --with symfony/translation="${{ matrix.env.symfony }}"
+        run: composer update --no-progress --ansi --prefer-${{ matrix.prefer }} --no-interaction --with symfony/translation="${{ matrix.env.symfony }}.*"
 
       - name: Validate composer.json and composer.lock
         run: composer validate --no-interaction --ansi
