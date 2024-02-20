@@ -73,20 +73,20 @@ jobs:
           XDEBUG_MODE: coverage
         run: vendor/bin/simple-phpunit \
           --configuration phpunit.xml.dist \
-          --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
+          --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}.cov"
 
       - name: upload coverage file
         if: "${{github.event_name}} == 'pull_request'"
         uses: actions/upload-artifact@v4
         with:
           name: coverage
-          path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.cov"
+          path: "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}.cov"
 
       - name: upload composer.lock on fail
         if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}"
+          name: "composer.php-${{ matrix.env.php }}.symfony-${{ matrix.env.symfony }}.${{ matrix.prefer }}"
           path: |
             composer.json
             composer.lock
