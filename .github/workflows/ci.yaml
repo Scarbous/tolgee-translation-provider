@@ -71,7 +71,7 @@ jobs:
       - name: PHPUnit tests
         env:
           XDEBUG_MODE: coverage
-        run: vendor/bin/simple-phpunit \
+        run: composer exec simple-phpunit \
           --configuration phpunit.xml.dist \
           --coverage-php "coverage/test.${{ matrix.env.php }}.${{ matrix.env.symfony }}.${{ matrix.prefer }}.cov"
 
